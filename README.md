@@ -11,9 +11,8 @@
 
 ## Development
 
-    `bundle install`
-
-    `bundle exec rspec spec`
+    bundle install
+    bundle exec rspec spec
 
 # License
 
