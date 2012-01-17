@@ -18,19 +18,38 @@ module PearsonHashing
            120, 140, 138,  28,  84, 186, 198, 131,  54,   2,  56,  78, 173, 151,  83,  27,
            255, 144, 249, 189, 104,   4, 168,  98, 162, 150, 254, 242, 109,  34, 133, 224,
            228,  79, 103, 201, 160,  90,  18,  61,  10, 233,  91,  80, 124,  96, 244,  36]
-  
-  # Calculates a hash based on pearson hashing algorithm
+
+
+
+  # Calculates a 8bit hash based on pearson hashing algorithm
+  # (values range from 0 to 256)
   # 
   # Further descriptions can be found here:
   #  * http://en.wikipedia.org/wiki/Pearson_hashing
   #  * http://cs.mwsu.edu/~griffin/courses/2133/downloads/Old_Assignments/p677-pearson.pdf
   # @param [String] string
   # @return [Fixnum] hash
-  def self.digest(string)
+  def self.digest8(string)
     hash = string.size % 256
     string.each_byte do |byte|
       hash = TABLE[ (hash + byte) % 256 ]
     end
     hash
+  end
+  class << self
+    alias :digest :digest8
+  end
+
+  # Calculates a bit more complex 16bit hash, as describe in page 679 of:
+  # (values range from 0 to 65536)
+  #
+  # http://cs.mwsu.edu/~griffin/courses/2133/downloads/Old_Assignments/p677-pearson.pdf
+  # @param [String] string
+  # @return [Fixnum] hash
+  def self.digest16(string)
+    h1 = PearsonHashing.digest(string)
+    string2 = [((string.bytes.first+1)%256)].pack('U*') + string[1,string.size]
+    h2 = PearsonHashing.digest(string2)
+    h1 * h2
   end
 end
