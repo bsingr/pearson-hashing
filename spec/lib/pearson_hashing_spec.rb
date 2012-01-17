@@ -9,7 +9,7 @@ describe PearsonHashing do
   
   describe '#digest16' do
     it 'should return 96 for "foo"' do
-      PearsonHashing.digest16('foo').should == 9504
+      PearsonHashing.digest16('foo').should == 96099
     end
   end
   

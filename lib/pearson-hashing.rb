@@ -50,6 +50,6 @@ module PearsonHashing
     h1 = PearsonHashing.digest(string)
     string2 = [((string.bytes.first+1)%256)].pack('U*') + string[1,string.size]
     h2 = PearsonHashing.digest(string2)
-    h1 * h2
+    ("%03d" % h1 + "%03d" % h2).to_i
   end
 end
