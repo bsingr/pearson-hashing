@@ -2,7 +2,7 @@
 
 require File.expand_path('../../lib/pearson-hashing', __FILE__)
 
-SIZE = 100_000
+SIZE = 512**2
 
 def benchmark(name, &block)
   puts "#{name}.."
@@ -21,9 +21,13 @@ end
 benchmark 'PearsonHashing#digest8' do |str|
   PearsonHashing.digest8 str
 end
-  
+
 benchmark 'PearsonHashing#digest16' do |str|
   PearsonHashing.digest16 str
+end
+
+benchmark 'PearsonHashing#digest32' do |str|
+  PearsonHashing.digest32 str
 end
 
 benchmark 'String#hash' do |str|

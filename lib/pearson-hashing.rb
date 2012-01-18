@@ -1,6 +1,5 @@
 require File.join(File.dirname(__FILE__), 'pearson-hashing/version')
 
-
 module PearsonHashing
   TABLE = [49, 118,  63, 252,  13, 155, 114, 130, 137,  40, 210,  62, 219, 246, 136, 221,
            174, 106,  37, 227, 166,  25, 139,  19, 204, 212,  64, 176,  70,  11, 170,  58,
@@ -36,6 +35,8 @@ module PearsonHashing
     end
     hash
   end
+  
+  # make #digest8 the default
   class << self
     alias :digest :digest8
   end
@@ -47,9 +48,28 @@ module PearsonHashing
   # @param [String] string
   # @return [Fixnum] hash
   def self.digest16(string)
-    h1 = PearsonHashing.digest(string)
-    string2 = [((string.bytes.first+1)%256)].pack('U*') + string[1,string.size]
-    h2 = PearsonHashing.digest(string2)
-    ("%03d" % h1 + "%03d" % h2).to_i
+    h1 = PearsonHashing.digest8 string
+    h2 = PearsonHashing.digest8 shift string
+    format = '%03d'
+    (format % h1 + format % h2).to_i
+  end
+  
+  # 32 bit hash
+  # @param [String] string
+  # @param [Fixnum] hashvalue
+  def self.digest32(string)
+    h1 = PearsonHashing.digest8 string
+    h2 = PearsonHashing.digest8 shift string
+    h3 = PearsonHashing.digest8 shift shift string
+    format = '%03d'
+    (format % h1 + format % h2 + format % h3).to_i
+  end
+  
+private
+  
+  # @param [String] str
+  # @return [String] str with first byte moved up
+  def self.shift(str)
+    [(str.bytes.first+1)%256].pack('U*') + str[1,str.size]
   end
 end
