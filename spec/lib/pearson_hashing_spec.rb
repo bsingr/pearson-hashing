@@ -24,6 +24,20 @@ describe PearsonHashing do
       PearsonHashing.digest32('foo').should == 96099141
     end
   end
+  
+  describe '#digest_with_x_bytes' do
+    it 'should equal #digest8 with 1 byte' do
+      PearsonHashing.digest8('foo').should == \
+        PearsonHashing.digest_with_x_bytes('foo', 1)
+    end
+    it 'should equal #digest16 with 2 byte' do
+      PearsonHashing.digest16('foo').should == \
+        PearsonHashing.digest_with_x_bytes('foo', 2)
+    end
+    it 'should equal #digest21 with 3 byte' do
+      PearsonHashing.digest32('foo').should == \
+        PearsonHashing.digest_with_x_bytes('foo', 3)
     end
   end
+  
 end

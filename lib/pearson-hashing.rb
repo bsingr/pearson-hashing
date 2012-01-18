@@ -65,6 +65,26 @@ module PearsonHashing
     (format % h1 + format % h2 + format % h3).to_i
   end
   
+  # this is a dynamic implementation just to enable longer hashes
+  # but known to be slower than the hardcoded methods above
+  #
+  # 1 byte = 8 bit
+  # 2 bytes = 16 bit
+  # ...
+  #
+  # @param [String] string
+  # @param [Fixnum] no of bytes
+  # @return [Fixnum] hashvalue
+  def self.digest_with_x_bytes(string, no_of_bytes)
+    tmp_str = string.dup
+    result = ''
+    no_of_bytes.times do
+      result = result + "%03d" % PearsonHashing.digest8(tmp_str)
+      tmp_str = shift(tmp_str)
+    end
+    result.to_i
+  end
+  
 private
   
   # @param [String] str
